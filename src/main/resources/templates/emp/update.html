@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/js/md5.js}"></script>
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+
+<body>
+<div th:insert="~{commons/commons::topbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{commons/commons::sidebar(active='emps')}"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form th:action="@{/updateEmp}" method="post" onsubmit="check()">
+                <input type="hidden" name="id" th:value="${user.getId()}">
+                <div class=" form-group">
+                    <label>姓名</label>
+                    <input th:value="${user.getName()}" type="text" name="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" id="pwdTmp" placeholder="******">
+                    <input type="hidden" class="form-control" id="password" name="password" placeholder="密码"
+                           th:value="${user.getPassword()}">
+                </div>
+                <div class="form-group">
+                    <label>性别</label><br/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" value="1"
+                               th:checked="${user.getGender() =='1'}">
+                        <label class="form-check-label">男</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" value="0"
+                               th:checked="${user.getGender() =='0'}">
+                        <label class="form-check-label">女</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>生日</label>
+                    <!--springboot默认的日期格式为yy/MM/dd-->
+                    <input type="text" name="brith" class="form-control"
+                           th:value="${#dates.format(user.getBrith(),'yyyy-MM-dd')}">
+                </div>
+                <div class="form-group">
+                    <label>部门</label>
+                    <select class="form-control" name="departmentId">
+                        <!--注意这里的name是department.id，因为传入的参数为id-->
+                        <option th:each="dept:${departments}" th:text="${dept.getName()}"
+                                th:value="${dept.getId()}" th:selected="${user.getDepartmentId() == dept.getId()}">请选择部门
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>权限</label>
+                    <select class="form-control" name="competenceId">
+                        <!--注意这里的name是department.id，因为传入的参数为id-->
+                        <option th:each="coms:${competences}" th:text="${coms.getName()}"
+                                th:value="${coms.getId()}" th:selected="${user.getCompetenceId() == coms.getId()}">请选择部门
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">修改</button>
+            </form>
+            <script>
+                let pwdTmp = document.getElementById('pwdTmp')
+                let pwd = document.getElementById('password')
+                function check() {
+                    debugger
+                    while (pwdTmp.value != "" && pwdTmp.value != null) {
+                        pwd.value = hex_md5(pwdTmp.value)
+                        return
+                    }
+                }
+            </script>
+        </main>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+<!-- Graphs -->
+<script type="text/javascript" th:src="@{/js/Chart.min.js}"></script>
+<script>
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            datasets: [{
+                data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+                lineTension: 0,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                borderWidth: 4,
+                pointBackgroundColor: '#007bff'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+            }
+        }
+    });
+</script>
+
+</body>
+
+</html>

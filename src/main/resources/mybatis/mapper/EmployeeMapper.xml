@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.may.mapper.EmployeeMapper">
+    <insert id="addEmployee">
+        insert into test01.employee(name, password, gender, brith, departmentId, competenceId)
+        VALUES (#{name}, MD5(#{password}), #{gender}, #{brith}, #{departmentId}, #{competenceId})
+    </insert>
+    <update id="updateEmployee">
+        update test01.employee
+        set name         = #{name}
+          , password     = #{password}
+          , gender       = #{gender}
+          , brith        = #{brith}
+          , departmentId = #{departmentId}
+          , competenceId = #{competenceId}
+        where id = #{id}
+    </update>
+    <delete id="deleteEmployeeById">
+        delete
+        from test01.employee
+        where id = #{id}
+    </delete>
+    <select id="queryAll" resultType="com.may.pojo.Employee">
+        select *
+        from test01.employee
+    </select>
+    <select id="query" resultType="com.may.pojo.Employee">
+        select * from test01.employee
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name!=null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="departmentId != null">
+                and departmentId = #{departmentId}
+            </if>
+            <if test="competenceId != null">
+                and competenceId = #{competenceId}
+            </if>
+        </where>
+    </select>
+    <select id="queryByName" resultType="com.may.pojo.Employee">
+        select *
+        from test01.employee
+        where name = #{name}
+    </select>
+</mapper>

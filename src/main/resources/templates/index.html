@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>欢迎</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <script th:src="@{/js/md5.js}"></script>
+</head>
+
+<body class="text-center">
+
+<form class="form-signin" th:action="@{/login}" method="post" onsubmit="check()">
+    <img class="mb-4" th:src="@{/img/bootstrap-solid.svg}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+    <p th:text="${msg}" style="color: red"></p>
+    <label class="sr-only"></label>
+    <input type="text" class="form-control" name="name" placeholder="用户名" required="" autofocus="">
+    <label class="sr-only"></label>
+    <input type="password" class="form-control" id="pwdTmp" placeholder="密码"
+           required="">
+    <input type="hidden" class="form-control" id="password" name="password" placeholder="密码"
+           required="">
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" name="remember"> 记住我
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+    <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+</form>
+
+<script>
+    let pwdTmp = document.getElementById('pwdTmp')
+    let pwd = document.getElementById('password')
+
+    function check() {
+        pwd.value = hex_md5(pwdTmp.value)
+    }
+</script>
+</body>
+
+</html>
