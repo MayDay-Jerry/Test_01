@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/main")
                 .usernameParameter("name")
                 .failureForwardUrl("/err");
-        http.authorizeRequests().antMatchers("/","/error").permitAll()
+        http.authorizeRequests().antMatchers("/","/error","/swagger-ui.html").permitAll()
                 .antMatchers("/emp/**").hasAnyAuthority("admin","root")
                 .anyRequest().authenticated();
         http.rememberMe().rememberMeParameter("remember")
